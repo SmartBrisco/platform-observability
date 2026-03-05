@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:       #labels to match
+        app: prometheus    
+  template:
+    metadata:
+      labels:
+        app: prometheus    
+    spec:
+      containers:
+        - name: prometheus
+          image: prom/prometheus:latest # Official Prometheus image
+          ports:
+          - containerPort: 9090
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml" # Point to config
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/prometheus/
+      volumes:
+        - name: config-volume
+          configMap:
+            name: prometheus-config # References ConfigMap above
+---  
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  selector:
+    app: prometheus
+  type: ClusterIP
+  ports:
+  - name: web
+    protocol: TCP
+    port: 9090
+    targetPort: 9090
