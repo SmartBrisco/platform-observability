@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-collector
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:       #labels to match
+        app: otel-collector    
+  template:
+    metadata:
+      labels:
+       app: otel-collector     
+    spec:
+      containers:
+      - name: otel-collector
+        image: otel/opentelemetry-collector-contrib:latest
+        ports: 
+        - containerPort: 4317 
+        args:
+            - "--config=/etc/otel/otel-collector-config.yaml"
+        volumeMounts:
+          - name: otel-config
+            mountPath: /etc/otel
+      volumes:
+        - name: otel-config
+          configMap:
+            name: otel-collector-config   
+---  
+apiVersion: v1
+kind: Service
+metadata:
+  name: otel-collector
+  namespace: monitoring
+spec:
+  selector:
+    app: otel-collector
+  type: ClusterIP
+  ports:
+  - name: otlp-grpc
+    port: 4317
+    targetPort: 4317
+  - name: prometheus-metrics
+    port: 8889
+    targetPort: 8889
