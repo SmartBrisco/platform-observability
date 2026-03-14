@@ -259,3 +259,4 @@ kubectl delete pod -l app=otel-collector -n monitoring
 - **Project 1** — [Argo Events CI/CD Pipeline](https://github.com/SmartBrisco/argo-event-pipeline) — Event-driven application pipeline with AI-powered failure analysis
 - **Project 2** — [GitOps Infrastructure Pipeline](https://github.com/SmartBrisco/gitops-infra-pipeline) — GitHub Actions and Terraform infrastructure automation
 - **Project 3** — Platform Observability Stack (this project) — Unified observability with OpenTelemetry, Jaeger, Prometheus, and Grafana
+- **Bootstrap** — [Platform](https://github.com/SmartBrisco/Platform) — One command to spin up the full platform locally in under 10 minutes
